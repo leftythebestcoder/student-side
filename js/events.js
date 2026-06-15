@@ -17,10 +17,26 @@ fetch('events.json')
     .then(res => res.json())
     .then(data => {
         eventsData = data;
-        renderSidebar(eventsData);
-        if (eventsData.length > 0) {
-            selectedEvent = eventsData[0];
-            showEventDetail(selectedEvent);
+
+        const params = new URLSearchParams(window.location.search);
+        const categoryParam = params.get('category');
+
+        if (categoryParam) {
+            const categorySelect = document.querySelectorAll('.filter-box')[1]; // adjust index if needed
+            categorySelect.value = categoryParam;
+
+            const filtered = eventsData.filter(e => e.category === categoryParam);
+            renderSidebar(filtered);
+            if (filtered.length > 0) {
+                selectedEvent = filtered[0];
+                showEventDetail(selectedEvent);
+            }
+        } else {
+            renderSidebar(eventsData);
+            if (eventsData.length > 0) {
+                selectedEvent = eventsData[0];
+                showEventDetail(selectedEvent);
+            }
         }
     });
 
