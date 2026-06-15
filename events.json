@@ -11,7 +11,7 @@
     "registration": "Open",
     "organizer": "DLSU USG",
     "description": "The annual culminating concert of the Manila Campus' University Vision-Mission Week",
-    "images": ["../img/animusika1.jpg", "img/sample2.jpg"]
+    "images": ["img/animusika1.jpg", "img/sample2.jpg"]
   },
   {
     "id": 2,
@@ -29,16 +29,16 @@
   },
   {
     "id": 3,
-    "title": "Research Expo",
+    "title": "Inter-University InfoSec Conference",
     "category": "Academic",
     "date": "2026-06-20",
     "startTime": "10:00",
     "endTime": "15:00",
-    "venue": "Henry Sy Hall",
+    "venue": "Gokongwei Hall",
     "status": "Upcoming",
     "registration": "Closed",
-    "organizer": "Research Council",
-    "description": "Annual research showcase featuring student projects.",
+    "organizer": "ROOTCON",
+    "description": "An InfoSec conference co-hosted with ROOTCON, featuring talks on ethical hacking, exploit development, and malware analysis, capped off with a Capture the Flag (CTF) competition open to students.",
     "images": ["img/expo1.jpg", "img/expo2.jpg"]
   }
 ]
