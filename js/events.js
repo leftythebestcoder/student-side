@@ -1,112 +1,90 @@
 /* DROPDOWN */
-
-const profileBtn =
-document.getElementById("profileBtn");
-
-const dropdownMenu =
-document.getElementById("dropdownMenu");
-
+const profileBtn = document.getElementById("profileBtn");
+const dropdownMenu = document.getElementById("dropdownMenu");
 profileBtn.addEventListener("click", (e) => {
-
     e.stopPropagation();
-
     dropdownMenu.classList.toggle("show");
-
 });
-
 document.addEventListener("click", () => {
-
     dropdownMenu.classList.remove("show");
-
 });
 
-/* EVENT SELECTION */
+/* LOAD EVENTS FROM JSON */
+let eventsData = [];
+let selectedEvent = null;
 
-const eventButtons =
-document.querySelectorAll(".event-item");
-
-let selectedEvent = eventButtons[0];
-
-eventButtons.forEach(button => {
-
-    button.addEventListener("click", () => {
-
-        eventButtons.forEach(btn =>
-            btn.classList.remove("active")
-        );
-
-        button.classList.add("active");
-
-        selectedEvent = button;
-
-        document.getElementById("eventTitle")
-            .textContent = button.dataset.title;
-
-        document.getElementById("category")
-            .textContent = button.dataset.category;
-
-        document.getElementById("duration")
-            .textContent = button.dataset.duration;
-
-        document.getElementById("venue")
-            .textContent = button.dataset.venue;
-
-        document.getElementById("status")
-            .textContent = button.dataset.status;
-
-        document.getElementById("registration")
-            .textContent = button.dataset.registration;
-
-        document.getElementById("organizer")
-            .textContent = button.dataset.organizer;
-
-        document.getElementById("description")
-            .textContent = button.dataset.description;
-
+fetch('events.json')
+    .then(res => res.json())
+    .then(data => {
+        eventsData = data;
+        renderSidebar(eventsData);
+        if (eventsData.length > 0) {
+            selectedEvent = eventsData[0];
+            showEventDetail(selectedEvent);
+        }
     });
 
-});
+function renderSidebar(events) {
+    const sidebar = document.getElementById('eventSidebar');
+    sidebar.innerHTML = '';
+
+    events.forEach((event, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'event-item';
+        if (index === 0) btn.classList.add('active');
+        btn.textContent = event.title;
+
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.event-item').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            selectedEvent = event;
+            showEventDetail(event);
+        });
+
+        sidebar.appendChild(btn);
+    });
+}
+
+function showEventDetail(event) {
+    document.getElementById('eventTitle').textContent = event.title;
+    document.getElementById('category').textContent = event.category;
+    document.getElementById('duration').textContent =
+        formatTime(event.startTime) + ' - ' + formatTime(event.endTime);
+    document.getElementById('venue').textContent = event.venue;
+    document.getElementById('status').textContent = event.status;
+    document.getElementById('registration').textContent = event.registration;
+    document.getElementById('organizer').textContent = event.organizer;
+    document.getElementById('description').textContent = event.description;
+
+    const imageBoxes = document.querySelectorAll('.image-box');
+    imageBoxes.forEach((box, i) => {
+        if (event.images[i]) {
+            box.innerHTML = `<img src="${event.images[i]}" alt="${event.title} image ${i+1}">`;
+        } else {
+            box.innerHTML = '';
+        }
+    });
+}
+
+function formatTime(time24) {
+    const [hour, minute] = time24.split(':');
+    const h = parseInt(hour);
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    const displayHour = h % 12 === 0 ? 12 : h % 12;
+    return `${displayHour}:${minute} ${ampm}`;
+}
 
 /* INTERESTED BUTTON */
+document.getElementById("interestedBtn").addEventListener("click", () => {
+    const interestedEvents = JSON.parse(localStorage.getItem("interestedEvents")) || [];
+    const eventData = { title: selectedEvent.title };
 
-document
-.getElementById("interestedBtn")
-.addEventListener("click", () => {
-
-    const interestedEvents =
-        JSON.parse(
-            localStorage.getItem("interestedEvents")
-        ) || [];
-
-    const eventData = {
-        title: selectedEvent.dataset.title
-    };
-
-    const exists =
-        interestedEvents.some(
-            event =>
-            event.title === eventData.title
-        );
-
+    const exists = interestedEvents.some(event => event.title === eventData.title);
     if (!exists) {
-
         interestedEvents.push(eventData);
-
-        localStorage.setItem(
-            "interestedEvents",
-            JSON.stringify(interestedEvents)
-        );
-
-        alert(
-            "Added to Interested Events!"
-        );
-
+        localStorage.setItem("interestedEvents", JSON.stringify(interestedEvents));
+        alert("Added to Interested Events!");
     } else {
-
-        alert(
-            "Already added!"
-        );
-
+        alert("Already added!");
     }
-
 });
