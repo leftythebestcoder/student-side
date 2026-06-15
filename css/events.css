@@ -248,6 +248,8 @@ body{
     gap:35px;
 
     min-height:650px;
+
+    height: 650px;
 }
 
 /* LEFT SIDE */
@@ -318,6 +320,7 @@ body{
     display:flex;
     flex-direction:column;
     gap:20px;
+    overflow: hidden;
 }
 
 .image-box{
@@ -336,6 +339,13 @@ body{
     align-items:center;
 
     font-weight:600;
+}
+
+.image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 20px;
 }
 
 /* SEARCH BAR */
