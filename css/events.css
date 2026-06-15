@@ -321,23 +321,20 @@ body{
     flex-direction:column;
     gap:20px;
     overflow: hidden;
+    min-width: 0;
 }
 
 .image-box{
     flex:1;
-
     min-height:250px;
-
+    width: 100%;
+    overflow: hidden;
     background:white;
-
     border-radius:20px;
-
     color:#444;
-
     display:flex;
     justify-content:center;
     align-items:center;
-
     font-weight:600;
 }
 
